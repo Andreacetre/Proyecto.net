@@ -1,0 +1,65 @@
+﻿@model TeoSoft.Models.Venta
+
+@{
+    ViewData["Title"] = "Eliminar Venta";
+}
+
+<h1 class="text-center"><i class="fas fa-trash-alt"></i> Eliminar Venta</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="text-danger text-center mb-4">¿Está seguro de que desea eliminar esta venta?</h3>
+                <dl class="row">
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Fecha)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Fecha)</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Total)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Total)</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Cliente)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Cliente.Nombre)</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Producto)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Producto.Nombre)</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Estado)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Estado)</dd>
+                </dl>
+            </div>
+            <div class="card-footer text-center">
+                <form asp-action="Delete" id="deleteForm">
+                    <input type="hidden" asp-for="VentaId" />
+                    <button type="button" class="btn btn-danger delete-venta" data-id="@Model.VentaId">
+                        <i class="fas fa-trash-alt"></i> Eliminar
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Volver a la lista
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function () {
+            $('.delete-venta').on('click', function () {
+                var ventaId = $(this).data('id');
+                Swal.fire({
+                    title: '¿Está seguro?',
+                    text: "¡Esta acción no se puede deshacer!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('#deleteForm').submit();
+                    }
+                });
+            });
+        });
+    </script>
+}

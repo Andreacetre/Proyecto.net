@@ -1,0 +1,295 @@
+﻿@model TeoSoft.Models.AutenticacionModel
+
+@{
+    ViewData["Title"] = "Autenticación";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TeoSoft</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .auth-container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            width: 100%;
+            max-width: 800px;
+            margin: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .auth-tabs {
+            display: flex;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 5px;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            background: transparent;
+            cursor: pointer;
+            border: none;
+            font-weight: 600;
+            color: #333;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+        }
+
+            .auth-tab.active {
+                background: #4ECDC4;
+                color: white;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            }
+
+        .auth-content {
+            display: flex;
+            align-items: stretch;
+        }
+
+        .auth-form {
+            padding: 20px;
+            width: 100%;
+        }
+
+        .form-control {
+            border: 2px solid #e9ecef;
+            padding: 8px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+            .form-control:focus {
+                border-color: #4ECDC4;
+                box-shadow: 0 0 0 0.2rem rgba(78,205,196,0.25);
+            }
+
+        .btn-auth {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-login {
+            background-color: #4ECDC4;
+            border-color: #4ECDC4;
+        }
+
+            .btn-login:hover {
+                background-color: #45b7ae;
+                border-color: #45b7ae;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            }
+
+        .welcome-text {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+            .welcome-text h2 {
+                color: #2c3e50;
+                margin-bottom: 10px;
+                font-weight: 700;
+                font-size: 1.5rem;
+            }
+
+            .welcome-text p {
+                color: #7f8c8d;
+                font-size: 0.9rem;
+            }
+
+        .form-label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .text-danger {
+            color: #e74c3c;
+            font-size: 0.8rem;
+            margin-top: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-tabs">
+            <button class="auth-tab active" onclick="showTab('login')" id="loginTab">Iniciar Sesión</button>
+            <button class="auth-tab" onclick="showTab('register')" id="registerTab">Registrarse</button>
+        </div>
+
+        <div class="auth-content">
+            <!-- Login Form -->
+            <div id="loginForm" class="auth-form">
+                <div class="welcome-text">
+                    <h2>¡Bienvenido de vuelta!</h2>
+                    <p>Inicia sesión con tu información personal</p>
+                </div>
+
+                <form asp-action="Login" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Correo Electrónico</label>
+                        <input name="correo" type="email" class="form-control" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Contraseña</label>
+                        <input name="contrasena" type="password" class="form-control" required />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-auth btn-login">Iniciar Sesión</button>
+                </form>
+            </div>
+
+            <!-- Register Form -->
+            <div id="registerForm" class="auth-form" style="display: none;">
+                <div class="welcome-text">
+                    <h2>¡Crear Cuenta!</h2>
+                    <p>Ingresa tus datos personales</p>
+                </div>
+
+                <form asp-action="Registro" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Nombre" class="form-label"></label>
+                        <input asp-for="Nombre" class="form-control" required />
+                        <span asp-validation-for="Nombre" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Apellido" class="form-label"></label>
+                        <input asp-for="Apellido" class="form-control" required />
+                        <span asp-validation-for="Apellido" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="CorreoElectronico" class="form-label"></label>
+                        <input asp-for="CorreoElectronico" class="form-control" required />
+                        <span asp-validation-for="CorreoElectronico" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Contrasena" class="form-label"></label>
+                        <input asp-for="Contrasena" class="form-control" type="password" required />
+                        <span asp-validation-for="Contrasena" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ConfirmarContrasena" class="form-label"></label>
+                        <input asp-for="ConfirmarContrasena" class="form-control" type="password" required />
+                        <span asp-validation-for="ConfirmarContrasena" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-auth btn-login">Registrarse</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function showTab(tab) {
+            if (tab === 'login') {
+                document.getElementById('loginForm').style.display = 'block';
+                document.getElementById('registerForm').style.display = 'none';
+                document.getElementById('loginTab').classList.add('active');
+                document.getElementById('registerTab').classList.remove('active');
+            } else {
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('registerForm').style.display = 'block';
+                document.getElementById('loginTab').classList.remove('active');
+                document.getElementById('registerTab').classList.add('active');
+            }
+        }
+
+        // Aplicar estilos responsivos
+        function applyResponsiveStyles() {
+            var container = document.querySelector('.auth-container');
+            var form = document.querySelector('.auth-form');
+            var welcomeText = document.querySelector('.welcome-text');
+
+            if (window.innerWidth <= 576) {
+                container.style.margin = '5px';
+                form.style.padding = '15px';
+                welcomeText.querySelector('h2').style.fontSize = '1.3rem';
+                welcomeText.querySelector('p').style.fontSize = '0.8rem';
+                document.querySelectorAll('.form-label').forEach(function(label) {
+                    label.style.fontSize = '0.8rem';
+                });
+                document.querySelector('.btn-auth').style.padding = '8px';
+                document.querySelector('.btn-auth').style.fontSize = '0.9rem';
+            } else {
+                container.style.margin = '10px';
+                form.style.padding = '20px';
+                welcomeText.querySelector('h2').style.fontSize = '1.5rem';
+                welcomeText.querySelector('p').style.fontSize = '0.9rem';
+                document.querySelectorAll('.form-label').forEach(function(label) {
+                    label.style.fontSize = '0.9rem';
+                });
+                document.querySelector('.btn-auth').style.padding = '10px';
+                document.querySelector('.btn-auth').style.fontSize = '1rem';
+            }
+        }
+
+        // Aplicar estilos al cargar y al cambiar el tamaño de la ventana
+        window.addEventListener('load', applyResponsiveStyles);
+        window.addEventListener('resize', applyResponsiveStyles);
+
+        // Show error messages if any
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <text>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            showTab('register');
+                        });
+            </text>
+        }
+
+        // SweetAlert2
+        @if (TempData["SweetAlert"] != null)
+        {
+            <text>
+                document.addEventListener('DOMContentLoaded', function () {
+                    var alertData = '@TempData["SweetAlert"]'.split('|');
+                    Swal.fire({
+                        icon: alertData[0],
+                        title: alertData[1],
+                        text: alertData[2]
+                    });
+                });
+            </text>
+        }
+    </script>
+
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+</body>
+</html>

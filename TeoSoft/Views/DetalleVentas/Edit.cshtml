@@ -1,0 +1,98 @@
+﻿@model TeoSoft.Models.DetalleVenta
+
+@{
+    ViewData["Title"] = "Editar Detalle de Venta";
+}
+
+<h1 class="text-center"><i class="fas fa-edit"></i> Editar Detalle de Venta</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="DetalleVentaId" />
+
+                    <!-- VentaId -->
+                    <div class="form-group">
+                        <label asp-for="VentaId" class="control-label"></label>
+                        <select asp-for="VentaId" class="form-control" asp-items="ViewBag.VentaId"></select>
+                        <span asp-validation-for="VentaId" class="text-danger"></span>
+                    </div>
+
+                    <!-- ProductoId -->
+                    <div class="form-group">
+                        <label asp-for="ProductoId" class="control-label"></label>
+                        <select asp-for="ProductoId" class="form-control" asp-items="ViewBag.ProductoId"></select>
+                        <span asp-validation-for="ProductoId" class="text-danger"></span>
+                    </div>
+
+                    <!-- Cantidad -->
+                    <div class="form-group">
+                        <label asp-for="Cantidad" class="control-label"></label>
+                        <input asp-for="Cantidad" class="form-control" id="cantidad" oninput="updateSubTotal(); formatInput('cantidad')" />
+                        <span asp-validation-for="Cantidad" class="text-danger"></span>
+                    </div>
+
+                    <!-- Precio -->
+                    <div class="form-group">
+                        <label asp-for="Precio" class="control-label"></label>
+                        <input asp-for="Precio" class="form-control" id="precio" oninput="updateSubTotal(); formatInput('precio')" />
+                        <span asp-validation-for="Precio" class="text-danger"></span>
+                    </div>
+
+                    <!-- SubTotal (calculado) -->
+                    <div class="form-group">
+                        <label asp-for="SubTotal" class="control-label"></label>
+                        <input asp-for="SubTotal" class="form-control" id="subtotal" readonly />
+                        <span asp-validation-for="SubTotal" class="text-danger"></span>
+                    </div>
+
+                    <!-- Botones -->
+                    <div class="form-group text-center mt-4">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Guardar
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Volver a la lista
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        // Función para actualizar el SubTotal automáticamente
+        function updateSubTotal() {
+            var cantidad = parseFloat(document.getElementById('cantidad').value.replace(/\./g, '').replace(/,/g, '.')) || 0;
+            var precio = parseFloat(document.getElementById('precio').value.replace(/\./g, '').replace(/,/g, '.')) || 0;
+            var subtotal = cantidad * precio;
+
+            // Formateamos el subtotal con 2 decimales y separadores de miles usando puntos
+            document.getElementById('subtotal').value = subtotal.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        // Función para formatear los números ingresados en los campos Precio y Cantidad
+        function formatInput(fieldId) {
+            var input = document.getElementById(fieldId);
+            var value = input.value.replace(/\./g, ''); // Eliminar puntos antes de formatear
+            var formattedValue = parseFloat(value).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            input.value = formattedValue;
+        }
+
+        // Llamamos a la función para inicializar el subtotal y los campos al cargar la página
+        window.onload = function() {
+            updateSubTotal();
+            formatInput('cantidad');
+            formatInput('precio');
+        }
+    </script>
+}

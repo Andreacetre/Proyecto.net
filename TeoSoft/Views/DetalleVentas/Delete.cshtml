@@ -1,0 +1,38 @@
+﻿@model TeoSoft.Models.DetalleVenta
+
+@{
+    ViewData["Title"] = "Eliminar Detalle de Venta";
+}
+
+<h1 class="text-center"><i class="fas fa-trash-alt"></i> Eliminar Detalle de Venta</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="text-danger text-center mb-4">¿Estás seguro de que quieres eliminar este detalle de venta?</h3>
+                <dl class="row">
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Venta)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Venta.VentaId)</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Producto)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Producto.Nombre)</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Cantidad)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Cantidad)</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Precio)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Precio)</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.SubTotal)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.SubTotal)</dd>
+                </dl>
+                <form asp-action="Delete" class="text-center mt-4">
+                    <input type="hidden" asp-for="DetalleVentaId" />
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Volver a la lista
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

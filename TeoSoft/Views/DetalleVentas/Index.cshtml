@@ -1,0 +1,132 @@
+﻿@model IEnumerable<TeoSoft.Models.DetalleVenta>
+
+@{
+    ViewData["Title"] = "Detalles de Ventas";
+}
+
+<h1 class="text-center"><i class="fas fa-receipt"></i> Gestión de Detalles de Ventas</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-sm btn-custom-blue">
+        <i class="fas fa-plus"></i> Crear Nuevo Detalle de Venta
+    </a>
+</p>
+
+@Html.AntiForgeryToken()
+
+<div class="table-container">
+    <table class="table table-striped table-bordered" id="detalleVentasTable">
+        <thead>
+            <tr>
+                <th class="text-center">@Html.DisplayNameFor(model => model.Venta.VentaId)</th>
+                <th class="text-center">@Html.DisplayNameFor(model => model.Producto.Nombre)</th>
+                <th class="text-center">@Html.DisplayNameFor(model => model.Cantidad)</th>
+                <th class="text-center">@Html.DisplayNameFor(model => model.Precio)</th>
+                <th class="text-center">@Html.DisplayNameFor(model => model.SubTotal)</th>
+                <th class="text-center">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr id="detalleVenta-@item.DetalleVentaId">
+                    <td class="text-center">@Html.DisplayFor(modelItem => item.Venta.VentaId)</td>
+                    <td class="text-center">@Html.DisplayFor(modelItem => item.Producto.Nombre)</td>
+                    <td class="text-center">@Html.DisplayFor(modelItem => item.Cantidad)</td>
+                    <td class="text-center">@Html.DisplayFor(modelItem => item.Precio)</td>
+                    <td class="text-center">@Html.DisplayFor(modelItem => item.SubTotal)</td>
+                    <td class="text-center">
+                        <div class="btn-group" role="group">
+                            <a asp-action="Edit" asp-route-id="@item.DetalleVentaId" class="btn btn-warning btn-action" title="Editar">
+                                <i class="bi bi-pencil-square text-white"></i>
+                            </a>
+                            <a asp-action="Details" asp-route-id="@item.DetalleVentaId" class="btn btn-primary btn-action" title="Ver detalles">
+                                <i class="bi bi-eye text-white"></i>
+                            </a>
+                            <button type="button" class="btn btn-danger btn-action delete-detalleVenta" title="Eliminar" data-id="@item.DetalleVentaId">
+                                <i class="bi bi-trash text-white"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function () {
+            var table = $('#detalleVentasTable').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    { extend: 'copy', text: '<i class="fas fa-copy"></i> Copiar <i class="fas fa-download"></i>', className: 'btn btn-copy' },
+                    { extend: 'csv', text: '<i class="fas fa-file-csv"></i> CSV <i class="fas fa-download"></i>', className: 'btn btn-csv', title: 'Detalles de Ventas', exportOptions: { columns: ':visible:not(:last-child)', modifier: { page: 'all' } } },
+                    { extend: 'excel', text: '<i class="fas fa-file-excel"></i> Excel <i class="fas fa-download"></i>', className: 'btn btn-excel', title: 'Detalles de Ventas', exportOptions: { columns: ':visible:not(:last-child)', modifier: { page: 'all' } } },
+                    { extend: 'pdf', text: '<i class="fas fa-file-pdf"></i> PDF <i class="fas fa-download"></i>', className: 'btn btn-pdf', title: 'Detalles de Ventas', exportOptions: { columns: ':visible:not(:last-child)', modifier: { page: 'all' } }, customize: function (doc) { doc.content[0].text = 'Detalles de Ventas'; doc.content[0].alignment = 'center'; doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split(''); doc.content[1].alignment = 'center'; doc.content[1].table.body.forEach(function (row) { row.forEach(function (cell) { cell.alignment = 'center'; }); }); } },
+                    { extend: 'print', text: '<i class="fas fa-print"></i> Imprimir <i class="fas fa-download"></i>', className: 'btn btn-print', title: 'Detalles de Ventas', exportOptions: { columns: ':visible:not(:last-child)', modifier: { page: 'all' } } }
+                ],
+                "columnDefs": [
+                    {
+                        "targets": [3, 4], // Columnas de Precio y SubTotal
+                        "render": function (data, type, row) {
+                            if (type === 'display' || type === 'filter') {
+                                // Formateo de precio y subtotal con puntos como separadores de miles
+                                return parseFloat(data).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                            }
+                            return data;
+                        }
+                    }
+                ]
+            });
+
+            $('.delete-detalleVenta').on('click', function () {
+                var detalleVentaId = $(this).data('id');
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: "¡Esta acción no se puede deshacer!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/DetalleVentas/Delete/' + detalleVentaId,
+                            type: 'POST',
+                            data: { "__RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                            success: function (response) {
+                                if (response.success) {
+                                    Swal.fire(
+                                        '¡Eliminado!',
+                                        response.message,
+                                        'success'
+                                    ).then(() => {
+                                        table.row($('#detalleVenta-' + detalleVentaId).closest('tr')).remove().draw(false);
+                                    });
+                                } else {
+                                    Swal.fire(
+                                        'Error',
+                                        response.message,
+                                        'error'
+                                    );
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.error(xhr.responseText);
+                                Swal.fire(
+                                    'Error',
+                                    'Ocurrió un error al eliminar el detalle de venta: ' + error,
+                                    'error'
+                                );
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}

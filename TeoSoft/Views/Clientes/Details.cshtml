@@ -1,0 +1,40 @@
+﻿@model TeoSoft.Models.Cliente
+
+@{
+    ViewData["Title"] = "Detalles del Cliente";
+}
+
+<h1 class="text-center"><i class="fas fa-user-circle"></i> Detalles del Cliente</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Nombre)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Nombre)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Direccion)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Direccion)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Telefono)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Telefono)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Documento)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Documento)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Correo)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Correo)</dd>
+                </dl>
+            </div>
+            <div class="card-footer text-center">
+                <a asp-action="Edit" asp-route-id="@Model.ClienteId" class="btn btn-warning">
+                    <i class="fas fa-edit"></i> Editar
+                </a>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Volver a la lista
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,193 @@
+﻿@model IEnumerable<TeoSoft.Models.Cliente>
+
+@{
+    ViewData["Title"] = "Clientes";
+}
+
+<h1 class="text-center"><i class="fas fa-users"></i> Gestión de Clientes</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-sm btn-custom-blue">
+        <i class="fas fa-plus"></i> Crear Nuevo Cliente
+    </a>
+</p>
+
+@Html.AntiForgeryToken()
+
+<div class="table-container">
+    <table class="table table-striped table-bordered" id="clientesTable">
+        <thead>
+            <tr>
+                <th class="text-center">@Html.DisplayNameFor(model => model.Nombre)</th>
+                <th class="text-center">@Html.DisplayNameFor(model => model.Direccion)</th>
+                <th class="text-center">@Html.DisplayNameFor(model => model.Telefono)</th>
+                <th class="text-center">@Html.DisplayNameFor(model => model.Documento)</th>
+                <th class="text-center">@Html.DisplayNameFor(model => model.Correo)</th>
+                <th class="text-center">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr id="cliente-@item.ClienteId">
+                    <td class="text-center">@Html.DisplayFor(modelItem => item.Nombre)</td>
+                    <td class="text-center">@Html.DisplayFor(modelItem => item.Direccion)</td>
+                    <td class="text-center">@Html.DisplayFor(modelItem => item.Telefono)</td>
+                    <td class="text-center">@Html.DisplayFor(modelItem => item.Documento)</td>
+                    <td class="text-center">@Html.DisplayFor(modelItem => item.Correo)</td>
+                    <td class="text-center">
+                        <div class="btn-group" role="group">
+                            <a asp-action="Edit" asp-route-id="@item.ClienteId" class="btn btn-warning btn-action" title="Editar">
+                                <i class="bi bi-pencil-square text-white"></i>
+                            </a>
+                            <a asp-action="Details" asp-route-id="@item.ClienteId" class="btn btn-primary btn-action" title="Ver detalles">
+                                <i class="bi bi-eye text-white"></i>
+                            </a>
+                            <button type="button" class="btn btn-danger btn-action delete-cliente" title="Eliminar" data-id="@item.ClienteId">
+                                <i class="bi bi-trash text-white"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function () {
+            var table = $('#clientesTable').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'copy',
+                        text: '<i class="fas fa-copy"></i> Copiar <i class="fas fa-download"></i>',
+                        className: 'btn btn-copy'
+                    },
+                    {
+                        extend: 'csv',
+                        text: '<i class="fas fa-file-csv"></i> CSV <i class="fas fa-download"></i>',
+                        className: 'btn btn-csv',
+                        title: 'Clientes',
+                        exportOptions: {
+                            columns: ':visible:not(:last-child)',
+                            modifier: {
+                                page: 'all'
+                            }
+                        }
+                    },
+                    {
+                        extend: 'excel',
+                        text: '<i class="fas fa-file-excel"></i> Excel <i class="fas fa-download"></i>',
+                        className: 'btn btn-excel',
+                        title: 'Clientes',
+                        exportOptions: {
+                            columns: ':visible:not(:last-child)',
+                            modifier: {
+                                page: 'all'
+                            }
+                        }
+                    },
+                    {
+                        extend: 'pdf',
+                        text: '<i class="fas fa-file-pdf"></i> PDF <i class="fas fa-download"></i>',
+                        className: 'btn btn-pdf',
+                        title: 'Clientes',
+                        exportOptions: {
+                            columns: ':visible:not(:last-child)',
+                            modifier: {
+                                page: 'all'
+                            }
+                        },
+                        customize: function (doc) {
+                            doc.content[0].text = 'Clientes';
+                            doc.content[0].alignment = 'center';
+                            doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                            doc.content[1].alignment = 'center';
+                            doc.content[1].table.body.forEach(function (row) {
+                                row.forEach(function (cell) {
+                                    cell.alignment = 'center';
+                                });
+                            });
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fas fa-print"></i> Imprimir <i class="fas fa-download"></i>',
+                        className: 'btn btn-print',
+                        title: 'Clientes',
+                        exportOptions: {
+                            columns: ':visible:not(:last-child)',
+                            modifier: {
+                                page: 'all'
+                            }
+                        }
+                    }
+                ]
+            });
+
+            $('.delete-cliente').on('click', function () {
+                var clienteId = $(this).data('id');
+
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: "¡Esta acción no se puede deshacer!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/Clientes/Delete/' + clienteId,
+                            type: 'POST',
+                            data: {
+                                "__RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+                            },
+                            success: function (response) {
+                                if (response.success) {
+                                    Swal.fire(
+                                        '¡Eliminado!',
+                                        response.message,
+                                        'success'
+                                    ).then(() => {
+                                        table.row($('#cliente-' + clienteId).closest('tr')).remove().draw(false);
+                                    });
+                                } else {
+                                    Swal.fire(
+                                        'Error',
+                                        response.message,
+                                        'error'
+                                    );
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.error(xhr.responseText);
+                                Swal.fire(
+                                    'Error',
+                                    'Ocurrió un error al eliminar el cliente: ' + error,
+                                    'error'
+                                );
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Mostrar alerta de éxito si existe
+            var successMessage = '@TempData["SuccessMessage"]';
+            if (successMessage) {
+                Swal.fire({
+                    title: '¡Éxito!',
+                    text: successMessage,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+    </script>
+}

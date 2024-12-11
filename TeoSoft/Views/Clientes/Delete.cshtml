@@ -1,0 +1,43 @@
+﻿@model TeoSoft.Models.Cliente
+
+@{
+    ViewData["Title"] = "Eliminar Cliente";
+}
+
+<h1 class="text-center"><i class="fas fa-user-times"></i> Eliminar Cliente</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="text-danger text-center mb-4">¿Estás seguro de que quieres eliminar este cliente?</h3>
+                <dl class="row">
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Nombre)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Nombre)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Direccion)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Direccion)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Telefono)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Telefono)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Documento)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Documento)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Correo)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Correo)</dd>
+                </dl>
+
+                <form asp-action="Delete" class="text-center mt-4">
+                    <input type="hidden" asp-for="ClienteId" />
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Volver a la lista
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

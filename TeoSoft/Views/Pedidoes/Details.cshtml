@@ -1,0 +1,44 @@
+﻿@model TeoSoft.Models.Pedido
+
+@{
+    ViewData["Title"] = "Detalles del Pedido";
+}
+
+<h1 class="text-center"><i class="fas fa-info-circle"></i> Detalles del Pedido</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Pedido #@Model.IdPedido</h4>
+                <dl class="row">
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Cliente)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Cliente.Nombre)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Producto)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Producto.Nombre)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.DireccionEnvio)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.DireccionEnvio)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.MetodoPago)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.MetodoPago)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.MontoTotal)</dt>
+                    <dd class="col-sm-8">@String.Format("{0:N0}", Model.MontoTotal)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.FechaDelPedido)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.FechaDelPedido)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.EstadoPedido)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.EstadoPedido)</dd>
+                </dl>
+            </div>
+            <div class="card-footer text-center">
+                <a asp-action="Edit" asp-route-id="@Model?.IdPedido" class="btn btn-warning">Editar</a>
+                <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
+            </div>
+        </div>
+    </div>
+</div>
+

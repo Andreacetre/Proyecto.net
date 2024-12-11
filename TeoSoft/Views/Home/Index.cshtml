@@ -1,0 +1,172 @@
+﻿@{
+    ViewData["Title"] = "Inicio";
+}
+
+<div class="landing-page">
+    <!-- Hero Section -->
+    <section class="hero py-5" style="background: linear-gradient(135deg, #FF6B6B, #4ECDC4); color: white; border-radius: 15px; padding: 2rem;">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold mb-4">Bienvenido al Panel de Administración de Teo/Cat</h1>
+                    <p class="lead mb-4">Gestiona tu tienda de productos para mascotas de manera eficiente y sencilla.</p>
+                    <a href="#dashboard" class="btn btn-light btn-lg px-4">
+                        Ver Dashboard
+                    </a>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <img src="~/Imagenes/logo.png" alt="Teo/Cat Logo" class="img-fluid" style="max-width: 400px;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Stats Section -->
+    <section id="dashboard" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-4">Dashboard</h2>
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-box fa-2x mb-3" style="color: #4ECDC4;"></i>
+                            <h5 class="card-title">Productos</h5>
+                            <p class="card-text">Gestiona tu inventario</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-shopping-cart fa-2x mb-3" style="color: #4ECDC4;"></i>
+                            <h5 class="card-title">Pedidos</h5>
+                            <p class="card-text">Control de pedidos</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-users fa-2x mb-3" style="color: #4ECDC4;"></i>
+                            <h5 class="card-title">Clientes</h5>
+                            <p class="card-text">Base de clientes</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-chart-line fa-2x mb-3" style="color: #4ECDC4;"></i>
+                            <h5 class="card-title">Ventas</h5>
+                            <p class="card-text">Análisis de ventas</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Actions Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-4">Acciones Rápidas</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="fas fa-plus-circle me-2" style="color: #4ECDC4;"></i>Nuevo Producto
+                            </h5>
+                            <p class="card-text">Agrega nuevos productos a tu inventario de manera rápida.</p>
+                            <a href="#" class="btn btn-primary">
+                                Agregar Producto
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="fas fa-tasks me-2" style="color: #4ECDC4;"></i>Gestionar Pedidos
+                            </h5>
+                            <p class="card-text">Revisa y actualiza el estado de los pedidos pendientes.</p>
+                            <a href="#" class="btn btn-primary">
+                                Ver Pedidos
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="fas fa-chart-bar me-2" style="color: #4ECDC4;"></i>Reportes
+                            </h5>
+                            <p class="card-text">Genera informes detallados de ventas e inventario.</p>
+                            <a href="#" class="btn btn-primary">
+                                Ver Reportes
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<style>
+    html, body {
+        overflow-x: hidden;
+        margin: 0;
+        padding: 0;
+    }
+
+    .landing-page {
+        padding: 2rem; /* Cambiado de margin negativo a padding */
+    }
+
+    .card {
+        transition: transform 0.3s ease;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+        }
+
+    .btn {
+        transition: all 0.3s ease;
+    }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+    .btn-primary {
+        background-color: #4ECDC4;
+        border-color: #4ECDC4;
+    }
+
+        .btn-primary:hover {
+            background-color: #45b7ae;
+            border-color: #45b7ae;
+        }
+
+    img {
+        max-width: 100%;
+        height: auto; /* Asegura que las imágenes sean responsivas */
+    }
+</style>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.card').hover(
+                function () { $(this).addClass('shadow-lg').css('cursor', 'pointer'); },
+                function () { $(this).removeClass('shadow-lg'); }
+            );
+        });
+    </script>
+}

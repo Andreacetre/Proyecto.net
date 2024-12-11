@@ -1,0 +1,63 @@
+﻿@model TeoSoft.Models.DetallePedido
+
+@{
+    ViewData["Title"] = "Eliminar Detalle de Pedido";
+}
+
+<h1 class="text-center"><i class="fas fa-trash-alt"></i> Eliminar Detalle de Pedido</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title text-danger">¿Está seguro que desea eliminar este detalle de pedido?</h3>
+                <dl class="row">
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Pedido)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Pedido.DireccionEnvio)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Producto)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Producto.Nombre)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Cantidad)</dt>
+                    <dd class="col-sm-8">@String.Format("{0:N0}", Model.Cantidad)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.PrecioUnitario)</dt>
+                    <dd class="col-sm-8">@String.Format("{0:N0}", Model.PrecioUnitario)</dd>
+                </dl>
+            </div>
+            <div class="card-footer text-center">
+                <form asp-action="Delete" id="deleteForm">
+                    <input type="hidden" asp-for="IdDetPedido" />
+                    <input type="submit" value="Eliminar" class="btn btn-danger" />
+                    <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function () {
+            $('#deleteForm').on('submit', function (e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: "Esta acción no se puede deshacer",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.submit();
+                    }
+                });
+            });
+        });
+    </script>
+}
+

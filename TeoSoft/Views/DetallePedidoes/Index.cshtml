@@ -1,0 +1,58 @@
+﻿@model IEnumerable<TeoSoft.Models.DetallePedido>
+
+@{
+    ViewData["Title"] = "Índice de Detalles de Pedido";
+}
+
+<h1 class="text-center"><i class="fas fa-list"></i> Índice de Detalles de Pedido</h1>
+
+<p class="text-center">
+    <a asp-action="Create" class="btn btn-primary"><i class="fas fa-plus"></i> Crear Nuevo</a>
+</p>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Pedido)</th>
+                <th>@Html.DisplayNameFor(model => model.Producto)</th>
+                <th>@Html.DisplayNameFor(model => model.Cantidad)</th>
+                <th>@Html.DisplayNameFor(model => model.PrecioUnitario)</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Pedido.DireccionEnvio)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Producto.Nombre)</td>
+                    <td>@String.Format("{0:N0}", item.Cantidad)</td>
+                    <td>@String.Format("{0:N0}", item.PrecioUnitario)</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.IdDetPedido" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>
+                        <a asp-action="Details" asp-route-id="@item.IdDetPedido" class="btn btn-info btn-sm"><i class="fas fa-info-circle"></i> Detalles</a>
+                        <a asp-action="Delete" asp-route-id="@item.IdDetPedido" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Eliminar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function() {
+            if (@Json.Serialize(TempData["SuccessMessage"]) != null) {
+                Swal.fire({
+                    title: 'Éxito',
+                    text: @Json.Serialize(TempData["SuccessMessage"]),
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+    </script>
+}
+

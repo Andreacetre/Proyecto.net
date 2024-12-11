@@ -1,0 +1,46 @@
+﻿@model TeoSoft.Models.Devolucion
+
+@{
+    ViewData["Title"] = "Eliminar Devolución";
+}
+
+<h1 class="text-center"><i class="fas fa-trash-alt"></i> Eliminar Devolución</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="text-danger text-center mb-4">¿Estás seguro de que quieres eliminar esta devolución?</h3>
+                <dl class="row">
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Venta)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Venta.VentaId)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Producto)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Producto.Nombre)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.FechaDeDevolucion)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.FechaDeDevolucion)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Cantidad)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Cantidad)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.MotivoDeDevolucion)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.MotivoDeDevolucion)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.EstadoDeDevolucion)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.EstadoDeDevolucion)</dd>
+                </dl>
+
+                <form asp-action="Delete" class="text-center mt-4">
+                    <input type="hidden" asp-for="IdDevolucion" />
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Volver a la lista
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

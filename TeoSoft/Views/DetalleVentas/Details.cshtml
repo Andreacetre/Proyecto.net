@@ -1,0 +1,42 @@
+﻿@model TeoSoft.Models.DetalleVenta
+
+@{
+    ViewData["Title"] = "Detalles de la Venta";
+}
+
+<h1 class="text-center"><i class="fas fa-info-circle"></i> Detalles de la Venta</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Venta)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Venta.VentaId)</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Producto)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Producto.Nombre)</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Cantidad)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Cantidad)</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Precio)</dt>
+                    <!-- Formateamos el precio con separadores de miles -->
+                    <dd class="col-sm-8" id="formattedPrecio">
+                        @String.Format("{0:N2}", Model.Precio)
+                    </dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.SubTotal)</dt>
+                    <!-- Formateamos el subtotal con separadores de miles -->
+                    <dd class="col-sm-8" id="formattedSubTotal">
+                        @String.Format("{0:N2}", Model.SubTotal)
+                    </dd>
+                </dl>
+            </div>
+            <div class="card-footer text-center">
+                <a asp-action="Edit" asp-route-id="@Model.DetalleVentaId" class="btn btn-warning">
+                    <i class="fas fa-edit"></i> Editar
+                </a>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Volver a la lista
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

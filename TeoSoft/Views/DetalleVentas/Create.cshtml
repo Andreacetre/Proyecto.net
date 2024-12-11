@@ -1,0 +1,99 @@
+﻿@model TeoSoft.Models.DetalleVenta
+
+@{
+    ViewData["Title"] = "Crear Detalle de Venta";
+}
+
+<h1 class="text-center"><i class="fas fa-plus-circle"></i> Crear Detalle de Venta</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="VentaId" class="control-label"></label>
+                        <select asp-for="VentaId" class="form-control" asp-items="ViewBag.VentaId"></select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ProductoId" class="control-label"></label>
+                        <select asp-for="ProductoId" class="form-control" asp-items="ViewBag.ProductoId"></select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Cantidad" class="control-label"></label>
+                        <input asp-for="Cantidad" class="form-control" id="Cantidad" />
+                        <span asp-validation-for="Cantidad" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Precio" class="control-label"></label>
+                        <input asp-for="Precio" class="form-control" id="Precio" />
+                        <span asp-validation-for="Precio" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="SubTotal" class="control-label"></label>
+                        <!-- Hacemos el campo SubTotal inactivo pero no readonly, para poder mostrar el valor -->
+                        <input asp-for="SubTotal" class="form-control" id="SubTotal" disabled />
+                        <span asp-validation-for="SubTotal" class="text-danger"></span>
+                    </div>
+                    <div class="form-group text-center mt-4">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Crear
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Volver a la lista
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            // Formatear el valor de "Cantidad", "Precio" y "SubTotal" al cargar la página
+            formatNumberFields();
+
+            // Formatear los valores de los campos cuando se editan
+            $('#Cantidad, #Precio').on('input', function () {
+                formatNumberFields();
+                updateSubTotal(); // Actualizar el SubTotal en cada cambio de Precio o Cantidad
+            });
+
+            // Formatear los valores de los campos al cambiar
+            function formatNumberFields() {
+                // Formatear Cantidad
+                formatField('#Cantidad');
+                // Formatear Precio
+                formatField('#Precio');
+                // Formatear SubTotal
+                formatField('#SubTotal');
+            }
+
+            // Función para formatear el valor de un campo
+            function formatField(fieldId) {
+                var value = $(fieldId).val();
+                value = value.replace(/\./g, ''); // Eliminar puntos antes de formatear
+                if (value) {
+                    $(fieldId).val(value.replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+                }
+            }
+
+            // Función para actualizar el SubTotal
+            function updateSubTotal() {
+                var cantidad = parseFloat($('#Cantidad').val().replace(/\./g, '').replace(',', '.')) || 0;
+                var precio = parseFloat($('#Precio').val().replace(/\./g, '').replace(',', '.')) || 0;
+                var subTotal = cantidad * precio;
+
+                // Actualizamos el campo SubTotal con el valor calculado y formateado
+                $('#SubTotal').val(subTotal.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+            }
+        });
+    </script>
+}
