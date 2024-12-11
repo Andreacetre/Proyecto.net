@@ -38,4 +38,3 @@ namespace TeoSoft.Models
         public List<DetallePedido> DetallesPedido { get; set; } = new List<DetallePedido>();
     }
 }
-

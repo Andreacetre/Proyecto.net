@@ -8,15 +8,18 @@ namespace TeoSoft.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "El nombre es obligatorio")]
+        [StringLength(100, ErrorMessage = "El nombre no puede exceder los 100 caracteres.")]
         [Display(Name = "Nombre")]
         public string Nombre { get; set; }
 
         [Required(ErrorMessage = "El apellido es obligatorio")]
+        [StringLength(100, ErrorMessage = "El apellido no puede exceder los 100 caracteres.")]
         [Display(Name = "Apellido")]
         public string Apellido { get; set; }
 
         [Required(ErrorMessage = "El correo electrónico es obligatorio")]
         [EmailAddress(ErrorMessage = "El correo electrónico no es válido")]
+        [StringLength(100, ErrorMessage = "El correo electrónico no puede exceder los 100 caracteres.")]
         [Display(Name = "Correo electrónico")]
         public string CorreoElectronico { get; set; }
 
@@ -32,4 +35,3 @@ namespace TeoSoft.Models
         public string ConfirmarContrasena { get; set; }
     }
 }
-
