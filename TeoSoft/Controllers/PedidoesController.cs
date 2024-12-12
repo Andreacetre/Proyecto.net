@@ -51,6 +51,8 @@ namespace TeoSoft.Controllers
         {
             ViewData["IdCliente"] = new SelectList(_context.Clientes, "ClienteId", "Nombre");
             ViewData["IdProducto"] = new SelectList(_context.Productos, "ProductoId", "Nombre");
+            ViewData["MetodosPago"] = new SelectList(new List<string> { "Efectivo", "Transferencia", "Tarjeta débito/crédito" });
+            ViewData["EstadosPedido"] = new SelectList(new List<string> { "Pendiente", "Enviado", "Entregado", "Cancelado" });
             return View();
         }
 
@@ -68,6 +70,8 @@ namespace TeoSoft.Controllers
             }
             ViewData["IdCliente"] = new SelectList(_context.Clientes, "ClienteId", "Nombre", pedido.IdCliente);
             ViewData["IdProducto"] = new SelectList(_context.Productos, "ProductoId", "Nombre", pedido.IdProducto);
+            ViewData["MetodosPago"] = new SelectList(new List<string> { "Efectivo", "Transferencia", "Tarjeta débito/crédito" }, pedido.MetodoPago);
+            ViewData["EstadosPedido"] = new SelectList(new List<string> { "Pendiente", "Enviado", "Entregado", "Cancelado" }, pedido.EstadoPedido);
             return View(pedido);
         }
 
@@ -86,6 +90,8 @@ namespace TeoSoft.Controllers
             }
             ViewData["IdCliente"] = new SelectList(_context.Clientes, "ClienteId", "Nombre", pedido.IdCliente);
             ViewData["IdProducto"] = new SelectList(_context.Productos, "ProductoId", "Nombre", pedido.IdProducto);
+            ViewData["MetodosPago"] = new SelectList(new List<string> { "Efectivo", "Transferencia", "Tarjeta débito/crédito" }, pedido.MetodoPago);
+            ViewData["EstadosPedido"] = new SelectList(new List<string> { "Pendiente", "Enviado", "Entregado", "Cancelado" }, pedido.EstadoPedido);
             return View(pedido);
         }
 
@@ -122,6 +128,28 @@ namespace TeoSoft.Controllers
             }
             ViewData["IdCliente"] = new SelectList(_context.Clientes, "ClienteId", "Nombre", pedido.IdCliente);
             ViewData["IdProducto"] = new SelectList(_context.Productos, "ProductoId", "Nombre", pedido.IdProducto);
+            ViewData["MetodosPago"] = new SelectList(new List<string> { "Efectivo", "Transferencia", "Tarjeta débito/crédito" }, pedido.MetodoPago);
+            ViewData["EstadosPedido"] = new SelectList(new List<string> { "Pendiente", "Enviado", "Entregado", "Cancelado" }, pedido.EstadoPedido);
+            return View(pedido);
+        }
+
+        // GET: Pedidoes/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var pedido = await _context.Pedidos
+                .Include(p => p.Cliente)
+                .Include(p => p.Producto)
+                .FirstOrDefaultAsync(m => m.IdPedido == id);
+            if (pedido == null)
+            {
+                return NotFound();
+            }
+
             return View(pedido);
         }
 
@@ -154,4 +182,3 @@ namespace TeoSoft.Controllers
         }
     }
 }
-

@@ -22,8 +22,11 @@ namespace TeoSoft.Controllers
         // GET: Ventas
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Ventas.Include(v => v.Cliente).Include(v => v.Producto);
-            return View(await applicationDbContext.ToListAsync());
+            var ventas = await _context.Ventas
+                .Include(v => v.Cliente)
+                .Include(v => v.Producto)
+                .ToListAsync();
+            return View(ventas);
         }
 
         // GET: Ventas/Details/5
@@ -49,25 +52,37 @@ namespace TeoSoft.Controllers
         // GET: Ventas/Create
         public IActionResult Create()
         {
-            ViewData["ClienteId"] = new SelectList(_context.Clientes, "ClienteId", "Nombre");
-            ViewData["IdProducto"] = new SelectList(_context.Productos, "ProductoId", "Nombre");
-            return View();
+            var venta = new Venta { Fecha = DateTime.Now, Estado = "Pendiente" };
+            PrepareViewData(venta);
+            return View(venta);
         }
 
         // POST: Ventas/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("VentaId,Fecha,Total,ClienteId,IdProducto,Estado")] Venta venta)
+        public async Task<IActionResult> Create([Bind("Fecha,Cantidad,Total,ClienteId,IdProducto,Estado")] Venta venta)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(venta);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    var producto = await _context.Productos.FindAsync(venta.IdProducto);
+                    if (producto != null)
+                    {
+                        venta.Total = Math.Round(producto.Precio * venta.Cantidad, 2);
+                        venta.Fecha = DateTime.Now;
+                        _context.Add(venta);
+                        await _context.SaveChangesAsync();
+                        return Json(new { success = true, message = "Venta creada exitosamente" });
+                    }
+                }
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                return Json(new { success = false, message = "Error al crear la venta", errors });
             }
-            ViewData["ClienteId"] = new SelectList(_context.Clientes, "ClienteId", "Nombre", venta.ClienteId);
-            ViewData["IdProducto"] = new SelectList(_context.Productos, "ProductoId", "Nombre", venta.IdProducto);
-            return View(venta);
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error al crear la venta: " + ex.Message });
+            }
         }
 
         // GET: Ventas/Edit/5
@@ -83,15 +98,14 @@ namespace TeoSoft.Controllers
             {
                 return NotFound();
             }
-            ViewData["ClienteId"] = new SelectList(_context.Clientes, "ClienteId", "Nombre", venta.ClienteId);
-            ViewData["IdProducto"] = new SelectList(_context.Productos, "ProductoId", "Nombre", venta.IdProducto);
+            PrepareViewData(venta);
             return View(venta);
         }
 
         // POST: Ventas/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("VentaId,Fecha,Total,ClienteId,IdProducto,Estado")] Venta venta)
+        public async Task<IActionResult> Edit(int id, [Bind("VentaId,Fecha,Cantidad,Total,ClienteId,IdProducto,Estado")] Venta venta)
         {
             if (id != venta.VentaId)
             {
@@ -118,8 +132,27 @@ namespace TeoSoft.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClienteId"] = new SelectList(_context.Clientes, "ClienteId", "Nombre", venta.ClienteId);
-            ViewData["IdProducto"] = new SelectList(_context.Productos, "ProductoId", "Nombre", venta.IdProducto);
+            PrepareViewData(venta);
+            return View(venta);
+        }
+
+        // GET: Ventas/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var venta = await _context.Ventas
+                .Include(v => v.Cliente)
+                .Include(v => v.Producto)
+                .FirstOrDefaultAsync(m => m.VentaId == id);
+            if (venta == null)
+            {
+                return NotFound();
+            }
+
             return View(venta);
         }
 
@@ -128,36 +161,70 @@ namespace TeoSoft.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var venta = await _context.Ventas
-                .Include(v => v.Cliente)
-                .Include(v => v.Producto)
-                .FirstOrDefaultAsync(m => m.VentaId == id);
-
-            if (venta == null)
-            {
-                return Json(new { success = false, message = "La venta no fue encontrada." });
-            }
-
-            if (venta.Cliente != null || venta.Producto != null)
-            {
-                return Json(new { success = false, message = "No se puede eliminar la venta porque está asociada a un cliente o producto." });
-            }
-
-            try
-            {
-                _context.Ventas.Remove(venta);
-                await _context.SaveChangesAsync();
-                return Json(new { success = true, message = "La venta ha sido eliminada exitosamente." });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, message = "Ocurrió un error al eliminar la venta: " + ex.Message });
-            }
+            var venta = await _context.Ventas.FindAsync(id);
+            _context.Ventas.Remove(venta);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         private bool VentaExists(int id)
         {
             return _context.Ventas.Any(e => e.VentaId == id);
         }
+
+        // GET: Ventas/GetProductPrice/5
+        public async Task<IActionResult> GetProductPrice(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var producto = await _context.Productos.FindAsync(id);
+            if (producto == null)
+            {
+                return NotFound();
+            }
+
+            return Json(new { price = Math.Round(producto.Precio, 2) });
+        }
+
+        // GET: Ventas/GetVentaDetails/5
+        public async Task<IActionResult> GetVentaDetails(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var venta = await _context.Ventas
+                .Include(v => v.Producto)
+                .FirstOrDefaultAsync(v => v.VentaId == id);
+
+            if (venta == null)
+            {
+                return NotFound();
+            }
+
+            return Json(new
+            {
+                productoId = venta.IdProducto,
+                cantidad = venta.Cantidad,
+                productoNombre = venta.Producto.Nombre
+            });
+        }
+
+        private void PrepareViewData(Venta venta)
+        {
+            ViewData["ClienteId"] = new SelectList(_context.Clientes, "ClienteId", "Nombre", venta.ClienteId);
+            ViewData["IdProducto"] = new SelectList(_context.Productos, "ProductoId", "Nombre", venta.IdProducto);
+            ViewData["EstadoOptions"] = new List<SelectListItem>
+            {
+                new SelectListItem { Value = "Pendiente", Text = "Pendiente" },
+                new SelectListItem { Value = "Completada", Text = "Completada" },
+                new SelectListItem { Value = "Anulada", Text = "Anulada" }
+            };
+        }
     }
 }
+

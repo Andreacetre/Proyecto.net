@@ -16,7 +16,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="IdProducto" class="control-label"></label>
-                <select asp-for="IdProducto" class="form-control" asp-items="ViewBag.IdProducto"></select>
+                <select asp-for="IdProducto" class="form-control" asp-items="ViewBag.IdProducto" id="IdProducto"></select>
             </div>
             <div class="form-group">
                 <label asp-for="DireccionEnvio" class="control-label"></label>
@@ -25,12 +25,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="MetodoPago" class="control-label"></label>
-                <input asp-for="MetodoPago" class="form-control" />
+                <select asp-for="MetodoPago" class="form-control" asp-items="ViewBag.MetodosPago"></select>
                 <span asp-validation-for="MetodoPago" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="MontoTotal" class="control-label"></label>
-                <input asp-for="MontoTotal" class="form-control" oninput="formatNumber(this)" />
+                <input asp-for="MontoTotal" class="form-control" readonly />
                 <span asp-validation-for="MontoTotal" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -40,7 +40,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="EstadoPedido" class="control-label"></label>
-                <input asp-for="EstadoPedido" class="form-control" />
+                <select asp-for="EstadoPedido" class="form-control" asp-items="ViewBag.EstadosPedido"></select>
                 <span asp-validation-for="EstadoPedido" class="text-danger"></span>
             </div>
             <div class="form-group text-center">
@@ -55,11 +55,26 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.6.0/cleave.min.js"></script>
     <script>
-        function formatNumber(input) {
-            var value = input.value.replace(/\D/g, "");
-            input.value = value.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-        }
+        $(document).ready(function() {
+            $('#IdProducto').change(function() {
+                var productId = $(this).val();
+                if (productId) {
+                    $.ajax({
+                        url: '/Productoes/GetPrice',
+                        type: 'GET',
+                        data: { id: productId },
+                        success: function(response) {
+                            $('#MontoTotal').val(response);
+                        },
+                        error: function() {
+                            console.error('Error al obtener el precio del producto');
+                        }
+                    });
+                }
+            });
+        });
     </script>
 }
-

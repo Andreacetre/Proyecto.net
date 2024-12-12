@@ -10,16 +10,19 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-body">
-                <form asp-action="Create">
+                <form id="createDevolucionForm" asp-action="Create">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
-                        <label asp-for="VentaId" class="control-label"></label>
-                        <select asp-for="VentaId" class="form-control" asp-items="ViewBag.VentaId"></select>
+                        <label asp-for="VentaId" class="control-label">Venta</label>
+                        <select asp-for="VentaId" class="form-control" asp-items="ViewBag.VentaId">
+                            <option value="">Seleccione una venta</option>
+                        </select>
                         <span asp-validation-for="VentaId" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="ProductoId" class="control-label"></label>
-                        <select asp-for="ProductoId" class="form-control" asp-items="ViewBag.ProductoId"></select>
+                        <label asp-for="ProductoId" class="control-label">Producto</label>
+                        <input type="text" id="ProductoNombre" class="form-control" readonly />
+                        <input asp-for="ProductoId" type="hidden" />
                         <span asp-validation-for="ProductoId" class="text-danger"></span>
                     </div>
                     <div class="form-group">
@@ -64,4 +67,71 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function () {
+            $('#VentaId').change(function() {
+                var ventaId = $(this).val();
+                if (ventaId) {
+                    $.ajax({
+                        url: '@Url.Action("GetVentaDetails", "Ventas")',
+                        type: 'GET',
+                        data: { id: ventaId },
+                        success: function(response) {
+                            $('#ProductoId').val(response.productoId);
+                            $('#ProductoNombre').val(response.productoNombre);
+                            $('#Cantidad').attr('max', response.cantidad);
+                        },
+                        error: function() {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Error al obtener los detalles de la venta'
+                            });
+                        }
+                    });
+                } else {
+                    $('#ProductoId').val('');
+                    $('#ProductoNombre').val('');
+                    $('#Cantidad').removeAttr('max');
+                }
+            });
+
+            $('#createDevolucionForm').on('submit', function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: this.action,
+                    type: this.method,
+                    data: $(this).serialize(),
+                    success: function(result) {
+                        if (result.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: '¡Éxito!',
+                                text: result.message,
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = '@Url.Action("Index")';
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: result.message
+                            });
+                        }
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Ha ocurrido un error al procesar la solicitud.'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 }

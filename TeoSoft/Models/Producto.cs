@@ -12,6 +12,7 @@ namespace TeoSoft.Models
 
         [Required(ErrorMessage = "El código de barra es obligatorio.")]
         [StringLength(50, ErrorMessage = "El código de barra no puede exceder los 50 caracteres.")]
+        [Display(Name = "Código de Barra")]
         public string CodigoDeBarra { get; set; }
 
         [Required(ErrorMessage = "El nombre del producto es obligatorio.")]
@@ -34,9 +35,12 @@ namespace TeoSoft.Models
         [Range(0, 100, ErrorMessage = "El IVA debe estar entre 0 y 100.")]
         public double IVA { get; set; }
 
+        [DataType(DataType.Date)]
+        [Display(Name = "Fecha de Vencimiento")]
         public DateTime? FechaVencimiento { get; set; }
 
         [Required(ErrorMessage = "Debe indicar si el producto no tiene vencimiento.")]
+        [Display(Name = "Sin Vencimiento")]
         public bool SinVencimiento { get; set; }
 
         [Required(ErrorMessage = "El estado es obligatorio.")]
@@ -44,9 +48,10 @@ namespace TeoSoft.Models
         public string Estado { get; set; } = "Activo";
 
         [Required(ErrorMessage = "La categoría del producto es obligatoria.")]
+        [Display(Name = "Categoría")]
         public int CategoriaProductoId { get; set; }
 
-        [Required(ErrorMessage = "La categoría del producto es obligatoria.")]
+        [ForeignKey("CategoriaProductoId")]
         public CategoriaProducto CategoriaProducto { get; set; }
 
         // Relaciones

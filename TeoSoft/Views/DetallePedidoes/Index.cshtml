@@ -1,12 +1,12 @@
 ﻿@model IEnumerable<TeoSoft.Models.DetallePedido>
 
 @{
-    ViewData["Title"] = "Detalles de Pedidos";
+    ViewData["Title"] = "Índice de Detalles de Pedido";
 }
 
-<h1 class="text-center"><i class="fas fa-list"></i> Gestión de Detalles de Pedidos</h1>
+<h1 class="text-center"><i class="fas fa-list"></i> Índice de Detalles de Pedido</h1>
 
-<p>
+<p class="text-center">
     <a asp-action="Create" class="btn btn-sm btn-custom-blue">
         <i class="fas fa-plus"></i> Crear Nuevo Detalle de Pedido
     </a>
@@ -15,14 +15,14 @@
 @Html.AntiForgeryToken()
 
 <div class="table-responsive">
-    <table class="table table-striped table-bordered" id="detallesPedidoTable">
+    <table class="table table-striped table-bordered" id="detallePedidosTable">
         <thead>
             <tr>
+                <th class="text-center">@Html.DisplayNameFor(model => model.IdDetPedido)</th>
                 <th class="text-center">@Html.DisplayNameFor(model => model.Pedido.IdPedido)</th>
                 <th class="text-center">@Html.DisplayNameFor(model => model.Producto.Nombre)</th>
                 <th class="text-center">@Html.DisplayNameFor(model => model.Cantidad)</th>
                 <th class="text-center">@Html.DisplayNameFor(model => model.PrecioUnitario)</th>
-                <th class="text-center">Total</th>
                 <th class="text-center">Acciones</th>
             </tr>
         </thead>
@@ -30,11 +30,11 @@
             @foreach (var item in Model)
             {
                 <tr id="detallePedido-@item.IdDetPedido">
+                    <td class="text-center">@Html.DisplayFor(modelItem => item.IdDetPedido)</td>
                     <td class="text-center">@Html.DisplayFor(modelItem => item.Pedido.IdPedido)</td>
                     <td class="text-center">@Html.DisplayFor(modelItem => item.Producto.Nombre)</td>
                     <td class="text-center">@String.Format("{0:N0}", item.Cantidad)</td>
-                    <td class="text-center">@String.Format("{0:C2}", item.PrecioUnitario)</td>
-                    <td class="text-center">@String.Format("{0:C2}", item.Cantidad * item.PrecioUnitario)</td>
+                    <td class="text-center">@String.Format("{0:C}", item.PrecioUnitario)</td>
                     <td class="text-center">
                         <div class="btn-group" role="group">
                             <a asp-action="Edit" asp-route-id="@item.IdDetPedido" class="btn btn-warning btn-action" title="Editar">
@@ -55,10 +55,20 @@
 </div>
 
 @section Scripts {
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.0/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.bootstrap4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.colVis.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function () {
-            var table = $('#detallesPedidoTable').DataTable({
+            var table = $('#detallePedidosTable').DataTable({
                 responsive: true,
                 dom: 'Bfrtip',
                 buttons: [
@@ -170,7 +180,7 @@
                                 console.error(xhr.responseText);
                                 Swal.fire(
                                     'Error',
-                                    'Ocurrió un error al eliminar el detalle de pedido: ' + error,
+                                    'Ocurrió un error al eliminar el detalle del pedido: ' + error,
                                     'error'
                                 );
                             }
@@ -192,4 +202,3 @@
         });
     </script>
 }
-
