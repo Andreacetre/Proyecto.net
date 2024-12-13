@@ -21,118 +21,116 @@
             align-items: center;
             justify-content: center;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
         }
 
         .auth-container {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             overflow: hidden;
             width: 100%;
-            max-width: 800px;
-            margin: 10px;
+            max-width: 600px;
+            margin: 5px;
             display: flex;
             flex-direction: column;
+            padding: 10px;
         }
 
         .auth-tabs {
             display: flex;
-            background: rgba(255, 255, 255, 0.5);
             padding: 5px;
-            border-radius: 15px 15px 0 0;
+            border-bottom: 1px solid #ddd;
         }
 
         .auth-tab {
             flex: 1;
-            padding: 10px;
+            padding: 5px;
             text-align: center;
-            background: transparent;
-            cursor: pointer;
-            border: none;
+            font-size: 0.9rem;
             font-weight: 600;
             color: #333;
             transition: all 0.3s ease;
-            border-radius: 10px;
         }
 
             .auth-tab.active {
                 background: #4ECDC4;
                 color: white;
-                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             }
 
         .auth-content {
             display: flex;
-            align-items: stretch;
+            flex-direction: column;
         }
 
         .auth-form {
-            padding: 20px;
+            padding: 10px;
             width: 100%;
         }
 
         .form-control {
-            border: 2px solid #e9ecef;
-            padding: 8px;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
+            border: 1px solid #e9ecef;
+            padding: 5px;
+            margin-bottom: 10px;
+            border-radius: 5px;
         }
 
-            .form-control:focus {
-                border-color: #4ECDC4;
-                box-shadow: 0 0 0 0.2rem rgba(78,205,196,0.25);
-            }
+        .form-label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #2c3e50;
+        }
 
         .btn-auth {
             width: 100%;
-            padding: 10px;
-            border-radius: 8px;
+            padding: 8px;
+            border-radius: 5px;
+            font-size: 0.9rem;
             font-weight: 600;
-            margin-top: 15px;
-            transition: all 0.3s ease;
         }
-
-        .btn-login {
-            background-color: #4ECDC4;
-            border-color: #4ECDC4;
-        }
-
-            .btn-login:hover {
-                background-color: #45b7ae;
-                border-color: #45b7ae;
-                transform: translateY(-2px);
-                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            }
 
         .welcome-text {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
             .welcome-text h2 {
-                color: #2c3e50;
-                margin-bottom: 10px;
-                font-weight: 700;
-                font-size: 1.5rem;
+                font-size: 1.2rem;
+                margin-bottom: 8px;
+                font-weight: 600;
             }
 
             .welcome-text p {
+                font-size: 0.8rem;
                 color: #7f8c8d;
-                font-size: 0.9rem;
             }
 
-        .form-label {
-            font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 5px;
-            font-size: 0.9rem;
+        .text-danger {
+            font-size: 0.75rem;
+            margin-top: 2px;
         }
 
-        .text-danger {
-            color: #e74c3c;
+        (max-width: 576px) {
+            .auth-container
+
+        {
+            max-width: 95%;
+            margin: 10px auto;
+        }
+
+        .welcome-text h2 {
+            font-size: 1rem;
+        }
+
+        .form-control {
+            padding: 5px;
+        }
+
+        .btn-auth {
+            padding: 6px;
             font-size: 0.8rem;
-            margin-top: 3px;
+        }
+
         }
     </style>
 </head>
@@ -147,6 +145,7 @@
             <!-- Login Form -->
             <div id="loginForm" class="auth-form">
                 <div class="welcome-text">
+                    <img src="~/Imagenes/login2.jpeg" alt="Icono de usuario" class="user-icon" style="width: 50px; height: 50px; margin-bottom: 10px;">
                     <h2>¡Bienvenido de vuelta!</h2>
                     <p>Inicia sesión con tu información personal</p>
                 </div>
@@ -179,31 +178,31 @@
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                     <div class="mb-3">
-                        <label asp-for="Nombre" class="form-label"></label>
+                        <label asp-for="Nombre" class="form-label">Nombre</label>
                         <input asp-for="Nombre" class="form-control" required />
                         <span asp-validation-for="Nombre" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="Apellido" class="form-label"></label>
+                        <label asp-for="Apellido" class="form-label">Apellido</label>
                         <input asp-for="Apellido" class="form-control" required />
                         <span asp-validation-for="Apellido" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="CorreoElectronico" class="form-label"></label>
+                        <label asp-for="CorreoElectronico" class="form-label">Correo Electrónico</label>
                         <input asp-for="CorreoElectronico" class="form-control" required />
                         <span asp-validation-for="CorreoElectronico" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="Contrasena" class="form-label"></label>
+                        <label asp-for="Contrasena" class="form-label">Contraseña</label>
                         <input asp-for="Contrasena" class="form-control" type="password" required />
                         <span asp-validation-for="Contrasena" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="ConfirmarContrasena" class="form-label"></label>
+                        <label asp-for="ConfirmarContrasena" class="form-label">Confirmar Contraseña</label>
                         <input asp-for="ConfirmarContrasena" class="form-control" type="password" required />
                         <span asp-validation-for="ConfirmarContrasena" class="text-danger"></span>
                     </div>
@@ -239,53 +238,50 @@
 
             if (window.innerWidth <= 576) {
                 container.style.margin = '5px';
-                form.style.padding = '15px';
-                welcomeText.querySelector('h2').style.fontSize = '1.3rem';
+                form.style.padding = '10px';
+                welcomeText.querySelector('h2').style.fontSize = '1rem';
                 welcomeText.querySelector('p').style.fontSize = '0.8rem';
                 document.querySelectorAll('.form-label').forEach(function(label) {
                     label.style.fontSize = '0.8rem';
                 });
-                document.querySelector('.btn-auth').style.padding = '8px';
-                document.querySelector('.btn-auth').style.fontSize = '0.9rem';
+                document.querySelector('.btn-auth').style.padding = '6px';
+                document.querySelector('.btn-auth').style.fontSize = '0.8rem';
             } else {
                 container.style.margin = '10px';
                 form.style.padding = '20px';
-                welcomeText.querySelector('h2').style.fontSize = '1.5rem';
+                welcomeText.querySelector('h2').style.fontSize = '1.2rem';
                 welcomeText.querySelector('p').style.fontSize = '0.9rem';
                 document.querySelectorAll('.form-label').forEach(function(label) {
-                    label.style.fontSize = '0.9rem';
+                    label.style.fontSize = '0.85rem';
                 });
-                document.querySelector('.btn-auth').style.padding = '10px';
-                document.querySelector('.btn-auth').style.fontSize = '1rem';
+                document.querySelector('.btn-auth').style.padding = '8px';
+                document.querySelector('.btn-auth').style.fontSize = '0.9rem';
             }
         }
 
-        // Aplicar estilos al cargar y al cambiar el tamaño de la ventana
         window.addEventListener('load', applyResponsiveStyles);
         window.addEventListener('resize', applyResponsiveStyles);
 
-        // Show error messages if any
         @if (!ViewData.ModelState.IsValid)
         {
             <text>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            showTab('register');
-                        });
+                    document.addEventListener('DOMContentLoaded', function() {
+                        showTab('register');
+                    });
             </text>
         }
 
-        // SweetAlert2
         @if (TempData["SweetAlert"] != null)
         {
             <text>
-                document.addEventListener('DOMContentLoaded', function () {
-                    var alertData = '@TempData["SweetAlert"]'.split('|');
-                    Swal.fire({
-                        icon: alertData[0],
-                        title: alertData[1],
-                        text: alertData[2]
+                    document.addEventListener('DOMContentLoaded', function () {
+                        var alertData = '@TempData["SweetAlert"]'.split('|');
+                        Swal.fire({
+                            icon: alertData[0],
+                            title: alertData[1],
+                            text: alertData[2]
+                        });
                     });
-                });
             </text>
         }
     </script>

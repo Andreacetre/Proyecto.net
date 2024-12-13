@@ -12,7 +12,7 @@
             <div class="card-body">
                 <form asp-action="Edit">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="hidden" asp-for="IdDevolucion" />
+                    <input type="hidden" asp-for="DevolucionId" />
                     <div class="form-group">
                         <label asp-for="VentaId" class="control-label"></label>
                         <select asp-for="VentaId" class="form-control" asp-items="ViewBag.VentaId"></select>

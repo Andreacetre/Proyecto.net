@@ -6,7 +6,7 @@ namespace TeoSoft.Models
     public class Devolucion
     {
         [Key]
-        public int IdDevolucion { get; set; }
+        public int DevolucionId { get; set; }
 
         [Required(ErrorMessage = "El ID de la venta es obligatorio.")]
         [Display(Name = "Venta")]

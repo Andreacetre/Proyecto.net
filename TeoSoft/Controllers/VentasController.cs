@@ -116,8 +116,14 @@ namespace TeoSoft.Controllers
             {
                 try
                 {
+                    var producto = await _context.Productos.FindAsync(venta.IdProducto);
+                    if (producto != null)
+                    {
+                        venta.Total = Math.Round(producto.Precio * venta.Cantidad, 2);
+                    }
                     _context.Update(venta);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -130,7 +136,6 @@ namespace TeoSoft.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
             PrepareViewData(venta);
             return View(venta);

@@ -183,11 +183,11 @@ namespace TeoSoft.Migrations
 
             modelBuilder.Entity("TeoSoft.Models.Devolucion", b =>
                 {
-                    b.Property<int>("IdDevolucion")
+                    b.Property<int>("DevolucionId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdDevolucion"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DevolucionId"));
 
                     b.Property<int>("Cantidad")
                         .HasColumnType("int");
@@ -210,7 +210,7 @@ namespace TeoSoft.Migrations
                     b.Property<int>("VentaId")
                         .HasColumnType("int");
 
-                    b.HasKey("IdDevolucion");
+                    b.HasKey("DevolucionId");
 
                     b.HasIndex("ProductoId");
 

@@ -116,21 +116,27 @@ namespace TeoSoft.Controllers
                 {
                     _context.Update(producto);
                     await _context.SaveChangesAsync();
-                    return Json(new { success = true, message = "Producto actualizado exitosamente." });
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!ProductoExists(producto.ProductoId))
                     {
-                        return Json(new { success = false, message = "Producto no encontrado." });
+                        return NotFound();
                     }
                     else
                     {
-                        return Json(new { success = false, message = "Error al actualizar el producto." });
+                        throw;
                     }
                 }
             }
-            return Json(new { success = false, message = "Datos del producto no válidos." });
+            ViewData["CategoriaProductoId"] = new SelectList(_context.CategoriasProductos, "IdCatProduc", "Nombre", producto.CategoriaProductoId);
+            ViewData["EstadoOptions"] = new List<SelectListItem>
+            {
+                new SelectListItem { Value = "Activo", Text = "Activo" },
+                new SelectListItem { Value = "Inactivo", Text = "Inactivo" }
+            };
+            return View(producto);
         }
 
         // GET: Productoes/Delete/5

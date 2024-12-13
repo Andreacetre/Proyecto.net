@@ -59,10 +59,16 @@ namespace TeoSoft.Controllers
         // POST: Pedidoes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdPedido,IdCliente,IdProducto,DireccionEnvio,MetodoPago,MontoTotal,FechaDelPedido,EstadoPedido")] Pedido pedido)
+        public async Task<IActionResult> Create([Bind("IdPedido,IdCliente,IdProducto,DireccionEnvio,MetodoPago,MontoTotal,FechaDelPedido,EstadoPedido")] Pedido pedido, int Cantidad)
         {
             if (ModelState.IsValid)
             {
+                var producto = await _context.Productos.FindAsync(pedido.IdProducto);
+                if (producto != null)
+                {
+                    pedido.MontoTotal = producto.Precio * Cantidad;
+                }
+
                 _context.Add(pedido);
                 await _context.SaveChangesAsync();
                 TempData["SuccessMessage"] = "Pedido creado exitosamente.";
@@ -98,7 +104,7 @@ namespace TeoSoft.Controllers
         // POST: Pedidoes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdPedido,IdCliente,IdProducto,DireccionEnvio,MetodoPago,MontoTotal,FechaDelPedido,EstadoPedido")] Pedido pedido)
+        public async Task<IActionResult> Edit(int id, [Bind("IdPedido,IdCliente,IdProducto,DireccionEnvio,MetodoPago,MontoTotal,FechaDelPedido,EstadoPedido")] Pedido pedido, int Cantidad)
         {
             if (id != pedido.IdPedido)
             {
@@ -109,6 +115,12 @@ namespace TeoSoft.Controllers
             {
                 try
                 {
+                    var producto = await _context.Productos.FindAsync(pedido.IdProducto);
+                    if (producto != null)
+                    {
+                        pedido.MontoTotal = producto.Precio * Cantidad;
+                    }
+
                     _context.Update(pedido);
                     await _context.SaveChangesAsync();
                     TempData["SuccessMessage"] = "Pedido actualizado exitosamente.";

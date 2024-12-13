@@ -30,7 +30,7 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr id="devolucion-@item.IdDevolucion">
+                <tr id="devolucion-@item.DevolucionId">
                     <td class="text-center">@Html.DisplayFor(modelItem => item.Venta.VentaId)</td>
                     <td class="text-center">@Html.DisplayFor(modelItem => item.Producto.Nombre)</td>
                     <td class="text-center">@Html.DisplayFor(modelItem => item.FechaDeDevolucion)</td>
@@ -39,13 +39,13 @@
                     <td class="text-center">@Html.DisplayFor(modelItem => item.EstadoDeDevolucion)</td>
                     <td class="text-center">
                         <div class="btn-group" role="group">
-                            <a asp-action="Edit" asp-route-id="@item.IdDevolucion" class="btn btn-warning btn-action" title="Editar">
+                            <a asp-action="Edit" asp-route-id="@item.DevolucionId" class="btn btn-warning btn-action" title="Editar">
                                 <i class="bi bi-pencil-square text-white"></i>
                             </a>
-                            <a asp-action="Details" asp-route-id="@item.IdDevolucion" class="btn btn-primary btn-action" title="Ver detalles">
+                            <a asp-action="Details" asp-route-id="@item.DevolucionId" class="btn btn-primary btn-action" title="Ver detalles">
                                 <i class="bi bi-eye text-white"></i>
                             </a>
-                            <button type="button" class="btn btn-danger btn-action delete-devolucion" title="Eliminar" data-id="@item.IdDevolucion">
+                            <button type="button" class="btn btn-danger btn-action delete-devolucion" title="Eliminar" data-id="@item.DevolucionId">
                                 <i class="bi bi-trash text-white"></i>
                             </button>
                         </div>
